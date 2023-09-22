@@ -6,29 +6,32 @@
 #    By: ggulteki <ggulteki@student.42istanbul.com. +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/26 17:24:58 by ggulteki          #+#    #+#              #
-#    Updated: 2023/09/22 13:35:06 by ggulteki         ###   ########.fr        #
+#    Updated: 2023/09/22 19:02:00 by ggulteki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
 NAME = libft.a
-SRC_FILES = src/ft_isalpha.c src/ft_isdigit.c src/ft_isalnum.c src/ft_isascii.c \
-			src/ft_isprint.c src/ft_strlen.c src/ft_bzero.c src/ft_memset.c \
-			src/ft_memcpy.c src/ft_toupper.c src/ft_tolower.c src/ft_strlcpy.c \
-			src/ft_strlcat.c src/ft_strncmp.c src/ft_strchr.c \
-			src/ft_strrchr.c src/ft_memchr.c src/ft_memcmp.c src/ft_memmove.c \
-			src/ft_strnstr.c src/ft_atoi.c src/ft_calloc.c src/ft_strdup.c \
-			src/ft_substr.c src/ft_strjoin.c src/ft_strtrim.c src/ft_split.c \
-			src/ft_putchar_fd.c src/ft_putstr_fd.c src/ft_putendl_fd.c \
-			src/ft_putnbr_fd.c src/ft_itoa.c src/ft_strmapi.c src/ft_striteri.c
+INCLUDE = include
+OBJ_DIR = obj/
+SRC_DIR = src/
+SRC_FILES = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c \
+			ft_isprint.c ft_strlen.c ft_bzero.c ft_memset.c \
+			ft_memcpy.c ft_toupper.c ft_tolower.c ft_strlcpy.c \
+			ft_strlcat.c ft_strncmp.c ft_strchr.c \
+			ft_strrchr.c ft_memchr.c ft_memcmp.c ft_memmove.c \
+			ft_strnstr.c ft_atoi.c ft_calloc.c ft_strdup.c \
+			ft_substr.c ft_strjoin.c ft_strtrim.c ft_split.c \
+			ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c \
+			ft_putnbr_fd.c ft_itoa.c ft_strmapi.c ft_striteri.c
 
-SRC_FILES_BONUS = src/ft_lstnew.c src/ft_lstadd_front.c src/ft_lstsize.c \
-				  src/ft_lstlast.c src/ft_lstadd_back.c src/ft_lstdelone.c \
-				  src/ft_lstclear.c src/ft_lstiter.c src/ft_lstmap.c
+SRC_FILES_BONUS = ft_lstnew.c ft_lstadd_front.c ft_lstsize.c \
+				  ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c \
+				  ft_lstclear.c ft_lstiter.c ft_lstmap.c
 
-OBJ = $(SRC_FILES:.c=.o)
-OBJ_BONUS = $(SRC_FILES_BONUS:.c=.o)
+OBJ = $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
+OBJ_BONUS = $(addprefix $(OBJ_DIR), $(SRC_FILES_BONUS:.c=.o))
 RM = rm -rf
 
 all: $(NAME)
@@ -36,14 +39,15 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	ar rcs $(NAME) $(OBJ)
 
-src/%.o: src/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(INCLUDE)
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@
 
-bonus: $(OBJ_BONUS)
+bonus: $(OBJ) $(OBJ_BONUS)
 	ar rcs $(NAME) $(OBJ_BONUS)
 
 clean:
-	$(RM) $(OBJ) $(OBJ_BONUS)
+	$(RM) $(OBJ_DIR)
 
 fclean: clean
 	$(RM) $(NAME)
